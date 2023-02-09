@@ -1,0 +1,997 @@
+@charset 'utf-8';
+
+/* =============================================
+  @mixin
+============================================= */
+
+/* remの計算 */
+$baseFontSize: 16;
+@function rem($pixels) {
+  @return $pixels / $baseFontSize * 1rem;
+}
+
+/* line-heightの計算*/
+@function lh($pixels, $line-height) {
+  $lh: floor(($line-height / $pixels) * 10);
+  @return $lh / 10;
+}
+
+/* letter-spacingの計算 */
+@function ls($letter-spacing) {
+  @return ($letter-spacing / 1000) + em;
+}
+
+/* ブレイクポイント */
+
+$layout-width-inner: 1200px;
+
+$breakpoint: (
+  //キー : 値
+  "sp": "(max-width: 767px)",
+  "tab": "(min-width: 768px)",
+  "pc": "(min-width: #{$layout-width-inner})"
+) !default;
+
+@mixin mq($bp) {
+  @media #{map-get($breakpoint, $bp)} {
+    @content;
+  }
+}
+
+/* =============================================
+  Webフォント
+============================================= */
+// Noto Sans JP 400 700
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap");
+$font-family-jp: "Noto Sans JP", sans-serif;
+
+/* =============================================
+  カラー、フォントサイズの指定
+============================================= */
+$cBlack: #333;
+$cWhite: #fff;
+$cGray: #eee;
+$cDarkBule: #131d32;
+
+$mainColor: #3ea1d1;
+
+$font-sm: 14px;
+$font-df: 16px;
+$font-md: 18px;
+$font-lg: 26px;
+$font-xl: 40px;
+
+/* =============================================
+  Bass
+============================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: $font-df;
+  font-family: "ヒラギノ明朝 ProN", $font-family-jp, sans-serif;
+  line-height: lh(16, 27);
+  color: $cBlack;
+  background: $cWhite;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.inner {
+  width: $layout-width-inner;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  @include mq(tab) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  @include mq(pc) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.section {
+  padding-top: 96px;
+
+  @include mq(tab) {
+    padding-top: 160px;
+  }
+}
+
+.section-title {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: lh(30, 51);
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+
+  @include mq(tab) {
+    font-size: $font-xl;
+    line-height: lh(40, 68);
+    margin-bottom: 80px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background-color: $mainColor;
+  }
+}
+
+.sp {
+  display: block;
+  @include mq(tab) {
+    display: none;
+  }
+}
+.pc {
+  display: none;
+  @include mq(tab) {
+    display: block;
+  }
+}
+
+.btn {
+  display: block;
+  margin: 48px auto 0;
+  padding: 16px 54px;
+  color: $mainColor;
+  background-color: $cWhite;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: ls(1.4);
+  border: 1px solid $mainColor;
+  transition: all 0.3s ease;
+  &:hover {
+    &:not(.btn-submit) {
+      color: $cWhite;
+      background-color: $mainColor;
+    }
+  }
+}
+/* =============================================
+  header
+============================================= */
+.header {
+  width: 100%;
+  height: 60px;
+  background-color: $cWhite;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  @include mq(tab) {
+    height: 70px;
+  }
+
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    @include mq(tab) {
+      height: 70px;
+      padding-top: 27px;
+      padding-bottom: 27px;
+    }
+  }
+
+  &__logo {
+    width: 120px;
+    height: auto;
+  }
+
+  &__nav {
+    display: none;
+
+    @include mq(tab) {
+      display: block;
+    }
+
+    &-list {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+    }
+
+    &-item a {
+      display: block;
+      transition: color 0.3s ease;
+      &:hover {
+        color: $mainColor;
+      }
+    }
+  }
+}
+
+/* =============================================
+  メインビジュアル
+============================================= */
+.mainvisual {
+  margin-top: 60px;
+
+  @include mq(tab) {
+    margin-top: 70px;
+  }
+
+  &__inner {
+    position: relative;
+
+    @include mq(tab) {
+      height: 660px;
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 667px;
+    background: url(../img/SP/top.png) no-repeat center center / cover;
+
+    @include mq(tab) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      max-width: 990px;
+      height: 660px;
+      background: url(../img/top.png) no-repeat center center / cover;
+    }
+  }
+
+  &__textarea {
+    margin-top: 40px;
+
+    @include mq(tab) {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 40px;
+      width: 310px;
+      height: 310px;
+      background: $cWhite;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 10px;
+    }
+    @include mq(pc) {
+      left: 0;
+      width: 320px;
+      height: 320px;
+    }
+  }
+  &__read {
+    font-size: $font-lg;
+    font-weight: 600;
+  }
+  &__text {
+    margin-top: 32px;
+    @include mq(tab) {
+      margin-top: 28px;
+    }
+  }
+}
+
+/* =============================================
+  Concept
+============================================= */
+.concept {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 96px;
+
+    @include mq(tab) {
+      flex-direction: row;
+      gap: 35px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 160px;
+    }
+    @include mq(pc) {
+      gap: 80px;
+    }
+  }
+  &__image-box {
+    margin-bottom: 40px;
+  }
+  &__textarea {
+    &-read {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: lh(20, 34);
+      padding-bottom: 32px;
+      @include mq(tab) {
+        padding-bottom: 48px;
+      }
+    }
+  }
+}
+
+/* =============================================
+  feature
+============================================= */
+
+.feature {
+  &__card-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 96px;
+
+    @include mq(tab) {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 340px);
+      gap: 90px;
+      margin-bottom: 160px;
+    }
+  }
+  &__card-item {
+    width: 340px;
+    height: auto;
+    box-shadow: 3px 3px 15px rgba($color: #606060, $alpha: 0.62);
+
+    &:not(:last-child) {
+      margin-bottom: 48px;
+      @include mq(tab) {
+        margin-bottom: 0;
+      }
+    }
+
+    &:hover {
+      .feature__card-img > img {
+        transform: scale(1.1);
+      }
+    }
+  }
+  &__card-img {
+    overflow: hidden;
+    & img {
+      transition: transform 0.3s ease;
+    }
+  }
+  &__card-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 0;
+    text-align: center;
+    font-weight: 600;
+  }
+}
+/* =============================================
+  about
+============================================= */
+.about {
+  background: url(../img/SP/bg.png) no-repeat center center / cover;
+  color: $cWhite;
+  padding: 182px 15px 55px;
+  position: relative;
+
+  @include mq(tab) {
+    background: url(../img/bg.png) no-repeat center center / cover;
+    padding: 126px 40px;
+  }
+  &::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.12);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &__inner {
+    position: relative;
+
+    &-title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: lh(20, 34);
+      margin-bottom: 32px;
+      @include mq(tab) {
+        font-size: 24px;
+        line-height: lh(24, 37);
+        margin-bottom: 40px;
+      }
+    }
+
+    &-text {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: lh(14, 24);
+      @include mq(tab) {
+        font-size: 16px;
+        line-height: lh(16, 27);
+      }
+    }
+  }
+}
+
+/* =============================================
+  products
+============================================= */
+
+.products {
+  &__content {
+    &-list {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 48px;
+
+      @include mq(tab) {
+        display: grid;
+        gap: 80px;
+        grid-template-columns: repeat(auto-fit, 260px);
+      }
+    }
+
+    &-item {
+      padding: 0 58px;
+
+      @include mq(tab) {
+        padding: 0;
+      }
+    }
+  }
+
+  &__box {
+    width: 260px;
+    margin: 0 auto;
+
+    &:hover {
+      .products__box-img > img {
+        transform: scale(1.1);
+      }
+    }
+
+    &-img {
+      overflow: hidden;
+      & img {
+        transition: transform 0.3s ease;
+      }
+    }
+
+    &-text,
+    &-value {
+      font-size: 14px;
+      line-height: lh(14, 24);
+    }
+    &-text {
+      margin-top: 24px;
+    }
+    &-value {
+      color: #989898;
+      margin-top: 16px;
+    }
+  }
+}
+
+/* =============================================
+  News
+============================================= */
+.news {
+  &__content {
+    &-item {
+      width: 310px;
+      height: auto;
+      margin: 0 auto;
+      border-bottom: 1px solid #bbb;
+      padding-bottom: 24px;
+      &:not(:first-child) {
+        margin-top: 24px;
+        @include mq(tab) {
+          margin-top: 22px;
+        }
+      }
+
+      @include mq(tab) {
+        width: 100%;
+        max-width: 1040px;
+      }
+      & a {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        @include mq(tab) {
+          flex-direction: row;
+          align-items: center;
+          gap: 40px;
+        }
+      }
+
+      &:hover {
+        .news__content-img > img {
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    &-img {
+      overflow: hidden;
+      width: 310px;
+      & img {
+        transition: transform 0.3s ease;
+      }
+
+      @include mq(tab) {
+        width: 310px;
+      }
+    }
+    &-textarea {
+      width: 100%;
+      max-width: 736px;
+    }
+    &-date {
+      font-size: 14px;
+      line-height: lh(14, 24);
+      margin-bottom: 16px;
+    }
+    &-title {
+      font-weight: 600;
+      margin-bottom: 24px;
+      @include mq(tab) {
+        font-size: 18px;
+        line-height: lh(18, 31);
+      }
+    }
+    &-text {
+      color: #888888;
+      font-size: 14px;
+      line-height: lh(14, 24);
+    }
+  }
+}
+
+/* =============================================
+  concept02
+============================================= */
+.concept02 {
+  &__inner {
+    margin-bottom: 96px;
+    @include mq(tab) {
+      margin-bottom: 110px;
+    }
+    @include mq(pc) {
+      margin-bottom: 225px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    @include mq(tab) {
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 40px;
+    }
+    @include mq(pc) {
+      gap: 80px;
+    }
+  }
+  &__img {
+    width: 100%;
+    max-width: 600px;
+  }
+  &__textarea {
+    width: 100%;
+    max-width: 520px;
+
+    &-title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: lh(20, 34);
+      margin-bottom: 32px;
+
+      @include mq(tab) {
+        font-size: 20px;
+        line-height: lh(28, 48);
+      }
+      @include mq(pc) {
+        font-size: 28px;
+        margin-bottom: 48px;
+      }
+    }
+    &-text {
+      font-style: 14px;
+      line-height: lh(14, 24);
+      @include mq(tab) {
+        font-size: 16px;
+        line-height: lh(16, 27);
+      }
+    }
+  }
+}
+/* =============================================
+  contact
+============================================= */
+.contact {
+  background: url(../img/contact.png) no-repeat center center / cover;
+  padding-top: 57px;
+  padding-bottom: 57px;
+
+  @include mq(tab) {
+    padding-top: 72px;
+    padding-bottom: 85px;
+  }
+
+  &-title {
+    color: $mainColor;
+    margin-bottom: 33px;
+    @include mq(tab) {
+      margin-bottom: 56px;
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 32px;
+    @include mq(tab) {
+      margin-bottom: 24px;
+    }
+    &-red {
+      font-size: 16px;
+      color: #e7728e;
+    }
+  }
+  &__form {
+
+    & input[type="text"],
+    & input[type="email"],
+    textarea {
+      width: 100%;
+      border: 0;
+      font-size: 16px;
+      padding: 0.2em 0.5em;
+      background-color: $cWhite;
+      box-shadow: 5px 6px 15px rgba(96, 96, 96, 0.16);
+      border-radius: 2px;
+    }
+    & input[type="text"],
+    & input[type="email"] {
+      height: 40px;
+    }
+    & textarea {
+      min-height: 122px;
+      resize: vertical;
+    }
+
+    &-list {
+      padding: 0 40px;
+      max-width: 510px;
+      margin: 0 auto;
+      @include mq(tab) {
+        padding: 0;
+      }
+    }
+    &-item {
+
+      & + & {
+        margin-top: 32px;
+      }
+      @include mq(tab) {
+        display: flex;
+        gap: 18px;
+      }
+ 
+    }
+    &-title {
+      display: inline-block;
+      color: $cWhite;
+      background-color: rgba(62, 161, 209, 0.7);
+      font-size: 14px;
+      line-height: 40px;
+      height: 40px;
+      text-align: center;
+      position: relative;
+      margin-bottom: 3px;
+      padding: 0 15px 0;
+
+      @include mq(tab) {
+        flex: 0 1 100%;
+        font-size: 18px;
+        margin-bottom: 0;
+        padding: 0;
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 0;
+          right: -8px;
+          border-style: solid;
+          border-width: 20px 0 20px 8px;
+          border-color: transparent transparent transparent rgba(62, 161, 209, 0.7);
+        }
+      }
+
+    }
+    &-red {
+      color: #e7728e;
+      vertical-align: super;
+      line-height: 1;
+    }
+    &-input {
+      width: 100%;
+      @include mq(tab) {
+        flex: 0 0 320px;
+      }
+    }
+    &-wrap {
+      display: inline-block;
+      border: 1px solid $cWhite;
+      border-radius: 1px;
+      box-shadow: 5px 6px 15px rgba(96, 96, 96, 0.16);
+    }
+    &-radio {
+      position: relative;
+
+      &-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+
+        &:checked + .contact__form-radiopart {
+          background-color: $mainColor;
+          color: $cWhite;
+          border-radius: 1px;
+        }
+        &:focus + .contact__form-radiopart {
+          outline: -webkit-focus-ring-color auto 5px;
+        }
+      }
+    }
+
+    &-radiopart {
+      display: block;
+      background: $cWhite;
+      color: $mainColor;
+      height: 38px;
+      width: 80px;
+      line-height: 38px;
+      text-align: center;
+    }
+  }
+  &__footer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  &__privacy {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    vertical-align: middle;
+    
+    &-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+
+      &:checked + .contact__privacy-part {
+        width: 10px;
+        border-top: 0;
+        border-left: 0;
+        background: transparent;
+        transform: rotate(45deg);
+        top: -5px;
+        left: 5px;
+        
+      }
+      &:focus + .contact__privacy-part {
+        outline: -webkit-focus-ring-color auto 5px;
+      }
+      &:checked:focus + .contact__privacy-part {
+        outline: none;
+      }
+    }
+
+    &-part {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border: 1px solid $mainColor;
+      background: $cWhite;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all .2s;
+    }
+
+    &-link {
+      color: $mainColor;
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn-submit {
+  margin-top: 29px;
+  @include mq(tab) {
+    margin-top: 46px;
+  }
+}
+
+/* =============================================
+  footer
+============================================= */
+.footer {
+  background-color: #f7f7f7;
+
+  &__inner {
+    padding-top: 40px;
+    padding-bottom: 17px;
+
+    @include mq(tab) {
+      padding-top: 48px;
+    }
+  }
+  &__logo-img {
+    width: 120px;
+    margin: 0 auto;
+    margin-bottom: 24px;
+  }
+  &__nav-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    @include mq(tab) {
+      margin-bottom: 36px;
+    }
+  }
+  &__nav-item {
+    font-size: 12px;
+  }
+  &__sns-list {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-bottom: 18px;
+    @include mq(tab) {
+      margin-bottom: 24px;
+    }
+  }
+  &__sns-item {
+    color: $mainColor;
+    font-size: 24px;
+  }
+  &__copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #888888;
+  }
+}
+/* =============================================
+  ドロワーの実装
+============================================= */
+.drawer {
+  // icon部分　（通常）
+  &-icon {
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    z-index: 200;
+
+    @include mq(tab) {
+      display: none;
+    }
+
+    & span {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: $mainColor;
+      transition: background-color 0.1s;
+
+      &::before,
+      &::after {
+        content: "";
+        width: 100%;
+        height: 2px;
+        background: $mainColor;
+        position: absolute;
+      }
+      &::before {
+        top: -9px;
+        transition: transform 0.2s;
+      }
+      &::after {
+        top: 9px;
+        transition: transform 0.3s;
+      }
+    }
+  }
+  &-background {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 0;
+    height: 100vh;
+    background-color: $mainColor;
+    z-index: 90;
+    overflow-x: hidden;
+  }
+  &-content {
+    color: $cWhite;
+    padding-top: 46px;
+    font-size: $font-md;
+  }
+}
+
+body.open .drawer {
+  &-icon span {
+    background-color: transparent;
+
+    &::before {
+      transform: translateY(9px) rotate(-315deg);
+    }
+    &::after {
+      transform: translateY(-9px) rotate(135deg);
+    }
+  }
+  &-background {
+    width: 72vw;
+    transition: width 0.5s;
+  }
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 40px;
+
+    &__item {
+      display: flex;
+      justify-content: flex-end;
+      width: 85px;
+      height: auto;
+      padding-right: 15px;
+      & a {
+        display: block;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
