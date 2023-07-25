@@ -91,9 +91,13 @@ img {
   object-fit: cover;
 }
 
+.content {
+  overflow-x: hidden;
+}
+
 .inner {
-  width: $layout-width-inner;
-  max-width: 100%;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding-left: 15px;
   padding-right: 15px;
@@ -461,6 +465,12 @@ img {
       @include mq(tab) {
         padding: 0;
       }
+
+      @include mq(sp) {
+        padding: 0;
+      }
+
+
     }
   }
 
